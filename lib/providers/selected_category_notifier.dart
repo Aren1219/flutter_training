@@ -8,14 +8,18 @@ class SelectedCategoryNotifier extends StateNotifier<Category?> {
   SelectedCategoryNotifier(this.ref) : super(null);
 
   void selectCategory(String id) {
-    state = ref.read(categoryListProvider).firstWhere((element) => element.id == id);
+    state = ref
+        .read(categoryListProvider)
+        .firstWhere((element) => element.id == id);
   }
-  void updateCategory(Category category) {
-    ref.read(categoryListProvider.notifier).updateCategory(category);
+
+  void selectCategoryByInstance(Category category) {
+    // ref.read(categoryListProvider.notifier).updateCategory(category);
     state = category;
   }
 }
 
-var selectedCategoryProvider = StateNotifierProvider<SelectedCategoryNotifier, Category?>((ref) {
+var selectedCategoryProvider =
+    StateNotifierProvider<SelectedCategoryNotifier, Category?>((ref) {
   return SelectedCategoryNotifier(ref);
 });

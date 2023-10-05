@@ -2,8 +2,6 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:training/model/category.dart';
-import 'package:training/providers/selected_category_notifier.dart';
 import 'package:training/screens/category_details_screen.dart';
 import 'package:training/screens/home/screen_breakpoints.dart';
 
@@ -82,7 +80,7 @@ class WideWidget extends StatelessWidget {
       children: [
         SizedBox(
           width: 250,
-          child: CategoryScreen(),
+          child: CategoryScreen(isWideScreen: true),
         ),
         Expanded(
           child: CategoryDetailsScreen(
@@ -99,10 +97,10 @@ class NarrowWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Category? category = ref.watch(selectedCategoryProvider);
-    if(category!=null){
-      navService.navigateTo(Routes.categoryDetails);
-    }
-    return const CategoryScreen();
+    // Category? category = ref.watch(selectedCategoryProvider);
+    // if(category!=null){
+    //   navService.navigateTo(Routes.categoryDetails);
+    // }
+    return const CategoryScreen(isWideScreen: false,);
   }
 }

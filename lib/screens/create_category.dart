@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:training/components/my_button.dart';
 import 'package:training/components/my_text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,14 +9,14 @@ import 'package:training/screens/home/categories.dart';
 
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-class CreateCategory extends StatelessWidget {
+class CreateCategory extends ConsumerWidget {
   CreateCategory({super.key});
 
   final nameController = TextEditingController();
   final idController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Create Category"),
@@ -37,11 +38,11 @@ class CreateCategory extends StatelessWidget {
                 textInputAction: TextInputAction.done,
                 controller: nameController,
                 hint: 'Category Name',
-                onSubmitted: (value) => onSubmit(context),
+                onSubmitted: (value) => onSubmit(context, ref),
               ),
               const SizedBox(height: 36),
               MyButton(
-                onTap: () => onSubmit(context),
+                onTap: () => onSubmit(context, ref),
                 text: "Create",
               ),
               const SizedBox(height: 36),
@@ -50,9 +51,9 @@ class CreateCategory extends StatelessWidget {
         ));
   }
 
-  void onSubmit(BuildContext context) => createCategory(context);
+  void onSubmit(BuildContext context, WidgetRef ref) => createCategory(context, ref);
 
-  void createCategory(BuildContext context) async {
+  void createCategory(BuildContext context, WidgetRef ref) async {
     DialogUtil.showLoading(context, content: 'Creating Category');
     final user = FirebaseAuth.instance.currentUser!;
     CollectionReference category = FirebaseFirestore.instance.collection('categories-${user.uid}');

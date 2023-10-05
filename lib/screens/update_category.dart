@@ -12,15 +12,14 @@ import 'package:training/screens/home/categories.dart';
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 class UpdateCategory extends ConsumerWidget {
-  UpdateCategory({super.key, this.existingCategory});
-
-  final Category? existingCategory;
+  UpdateCategory({super.key});
 
   final nameController = TextEditingController();
   final idController = TextEditingController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    Category? existingCategory = ref.read(selectedCategoryProvider);
     nameController.text = existingCategory?.name ?? "";
     idController.text = existingCategory?.id ?? "";
     return Scaffold(
@@ -57,12 +56,17 @@ class UpdateCategory extends ConsumerWidget {
         ));
   }
 
-  void onSubmit(BuildContext context, WidgetRef ref) => updateCategory(context, existingCategory!.docId!, ref);
+  void onSubmit(BuildContext context, WidgetRef ref) =>
+      updateCategory(context, ref);
 
-  void updateCategory(BuildContext context, String catId, WidgetRef ref) async {
+  void updateCategory(BuildContext context, WidgetRef ref) async {
+    String? catId = ref.read(selectedCategoryProvider)?.docId;
+
     DialogUtil.showLoading(context, content: 'Updating Category');
     final user = FirebaseAuth.instance.currentUser!;
-    DocumentReference category = FirebaseFirestore.instance.collection('categories-${user.uid}').doc(catId);
+    DocumentReference category = FirebaseFirestore.instance
+        .collection('categories-${user.uid}')
+        .doc(catId);
     category.set({
       'name': nameController.text, // John Doe
       'id': idController.text
@@ -75,7 +79,13 @@ class UpdateCategory extends ConsumerWidget {
       navService.pop();
     });
 
-
-    ref.read(selectedCategoryProvider.notifier).updateCategory(Category(docId: catId, id: idController.text, name: nameController.text, color: Colors.green));
+    ref.read(selectedCategoryProvider.notifier).selectCategoryByInstance(
+          Category(
+            docId: catId,
+            id: idController.text,
+            name: nameController.text,
+            color: Colors.green,
+          ),
+        );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:training/components/my_button.dart';
@@ -16,7 +18,8 @@ class CategoryDetailsScreen extends ConsumerStatefulWidget {
   const CategoryDetailsScreen({super.key, this.showAppBar = true});
 
   @override
-  ConsumerState<CategoryDetailsScreen> createState() => _CategoryDetailsScreen();
+  ConsumerState<CategoryDetailsScreen> createState() =>
+      _CategoryDetailsScreen();
 }
 
 class _CategoryDetailsScreen extends ConsumerState<CategoryDetailsScreen> {
@@ -25,7 +28,10 @@ class _CategoryDetailsScreen extends ConsumerState<CategoryDetailsScreen> {
   Widget getPlaceholderText(BuildContext context) {
     return Text(
       "Item Not Selected",
-      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+      style: Theme.of(context)
+          .textTheme
+          .bodyMedium
+          ?.copyWith(color: Theme.of(context).colorScheme.onBackground),
     );
   }
 
@@ -34,7 +40,9 @@ class _CategoryDetailsScreen extends ConsumerState<CategoryDetailsScreen> {
     Category? category = ref.watch(selectedCategoryProvider);
     print("Build of detail is called");
     var body = Center(
-      child: category == null ? getPlaceholderText(context) : getMainBody(context, category),
+      child: category == null
+          ? getPlaceholderText(context)
+          : getMainBody(context, category),
     );
 
     if (!widget.showAppBar) {
@@ -56,8 +64,8 @@ class _CategoryDetailsScreen extends ConsumerState<CategoryDetailsScreen> {
           : const EdgeInsets.all(16.0),
       child: SizedBox(
         width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16.0),
@@ -83,8 +91,14 @@ class _CategoryDetailsScreen extends ConsumerState<CategoryDetailsScreen> {
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
                           colors: [
-                            Theme.of(context).colorScheme.background.withOpacity(0.9),
-                            Theme.of(context).colorScheme.background.withOpacity(0.0),
+                            Theme.of(context)
+                                .colorScheme
+                                .background
+                                .withOpacity(0.9),
+                            Theme.of(context)
+                                .colorScheme
+                                .background
+                                .withOpacity(0.0),
                           ],
                         ),
                       ),
@@ -97,7 +111,8 @@ class _CategoryDetailsScreen extends ConsumerState<CategoryDetailsScreen> {
                               child: Icon(
                                 Icons.camera_enhance,
                                 size: 24.0,
-                                color: Theme.of(context).colorScheme.onBackground,
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
                               ),
                             ),
                           )
@@ -108,26 +123,17 @@ class _CategoryDetailsScreen extends ConsumerState<CategoryDetailsScreen> {
                 ],
               ),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TitleText(text: "id"),
-                    Text(category.id),
-                    const SizedBox(height: 16.0),
-                    const TitleText(text: "name"),
-                    Text(category.name),
-                    const Spacer(flex: 1),
-                    MyButton(onTap: () => navService.navigateTo(Routes.updateCategory, arguments: category), text: 'Update'),
-                    const SizedBox(height: 16.0),
-                    MyNegativeButton(onTap: _deleteCategory, text: 'Delete')
-                  ],
-                ),
-              ),
-            ),
+            const TitleText(text: "id"),
+            Text(category.id),
+            const SizedBox(height: 16.0),
+            const TitleText(text: "name"),
+            Text(category.name),
+            const Spacer(flex: 1),
+            MyButton(
+                onTap: () => navService.navigateTo(Routes.updateCategory),
+                text: 'Update'),
+            const SizedBox(height: 16.0),
+            MyNegativeButton(onTap: _deleteCategory, text: 'Delete'),
           ],
         ),
       ),
@@ -140,6 +146,5 @@ class _CategoryDetailsScreen extends ConsumerState<CategoryDetailsScreen> {
     });
   }
 
-  _deleteCategory() {
-  }
+  _deleteCategory() {}
 }

@@ -9,17 +9,21 @@ import 'package:training/providers/selected_category_notifier.dart';
 import 'package:training/screens/home/screen_breakpoints.dart';
 import '../../di/locator.dart';
 import '../../navigation/navigation_service.dart';
+import '../../navigation/routes.dart';
 
 final NavigationService navService = locator<NavigationService>();
 
 class CategoryScreen extends ConsumerStatefulWidget {
-  const CategoryScreen({super.key});
+  const CategoryScreen({super.key, this.isWideScreen = false});
+
+  final bool isWideScreen;
 
   @override
   ConsumerState<CategoryScreen> createState() => _CategoryScreenState();
 }
 
-class _CategoryScreenState extends ConsumerState<CategoryScreen> with SingleTickerProviderStateMixin {
+class _CategoryScreenState extends ConsumerState<CategoryScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   bool isLoading = true;
 
@@ -54,7 +58,15 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with SingleTick
           ),
           itemBuilder: (context, index) => CategoryGridItem(
             categories[index],
-            onItem: (item) => ref.read(selectedCategoryProvider.notifier).selectCategory(item.id),
+            // onItem: (item) => ref.read(selectedCategoryProvider.notifier).selectCategory(item.id),
+            onItem: (category) {
+              ref
+                  .read(selectedCategoryProvider.notifier)
+                  .selectCategory(category.id);
+              if (!widget.isWideScreen) {
+                navService.navigateTo(Routes.categoryDetails);
+              }
+            },
           ),
         ),
         builder: (context, child) => Padding(
@@ -144,10 +156,9 @@ class DrawerListItem extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: Text(
             title,
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(color: Theme.of(context).colorScheme.onBackground, fontWeight: FontWeight.w500),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onBackground,
+                fontWeight: FontWeight.w500),
           )),
     );
   }

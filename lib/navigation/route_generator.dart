@@ -26,8 +26,7 @@ class RouteGenerator {
       case Routes.createCategory:
         return MaterialPageRoute(builder: (context) => CreateCategory());
       case Routes.updateCategory:
-        return MaterialPageRoute(
-            builder: (context) => UpdateCategory(existingCategory: settings.arguments as Category));
+        return MaterialPageRoute(builder: (context) => UpdateCategory());
       case Routes.categoryDetails:
         return MaterialPageRoute(
           builder: (context) => const CategoryDetailsScreen(),

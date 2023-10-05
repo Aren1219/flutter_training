@@ -5,7 +5,7 @@ class Category {
     required this.id,
     required this.name,
     required this.color,
-    this.docId
+    this.docId,
   });
 
   String? docId;
