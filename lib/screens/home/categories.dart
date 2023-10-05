@@ -24,9 +24,8 @@ class CategoryScreen extends ConsumerStatefulWidget {
 
 class _CategoryScreenState extends ConsumerState<CategoryScreen>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
+  // late AnimationController _animationController;
   bool isLoading = true;
-
   double padding = 200.0;
 
   @override
@@ -43,9 +42,8 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen>
     //   padding = 0;
     // });
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Trigger the animation after the build is complete
       setState(() {
-        padding = 0; // Change this to your desired padding value
+        padding = 0;
       });
     });
     super.initState();
@@ -57,9 +55,9 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen>
 
     return Scaffold(
       body: AnimatedPadding(
-        duration: const Duration(seconds: 1),
+        duration: const Duration(milliseconds: 500),
         padding: EdgeInsets.only(top: padding),
-        curve: Curves.linear,
+        curve: Curves.fastEaseInToSlowEaseOut,
         // animation: _animationController,
         child: GridView.builder(
           itemCount: categories.length,
@@ -87,11 +85,11 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen>
     );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _animationController.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   _animationController.dispose();
+  // }
 }
 
 class DrawerList extends StatelessWidget {

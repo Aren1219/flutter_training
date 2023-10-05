@@ -1,3 +1,4 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -122,12 +123,19 @@ class _CategoryDetailsScreen extends ConsumerState<CategoryDetailsScreen> {
                 ],
               ),
             ),
-            const TitleText(text: "id"),
-            Text(category.id),
-            const SizedBox(height: 16.0),
-            const TitleText(text: "name"),
-            Text(category.name),
-            const Spacer(flex: 1),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const TitleText(text: "id"),
+                  Text(category.id),
+                  const SizedBox(height: 16.0),
+                  const TitleText(text: "name"),
+                  Text(category.name),
+                ],
+              ),
+            ),
             MyButton(
                 onTap: () => navService.navigateTo(Routes.updateCategory),
                 text: 'Update'),
