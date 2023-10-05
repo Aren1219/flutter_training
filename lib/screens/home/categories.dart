@@ -27,16 +27,27 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen>
   late AnimationController _animationController;
   bool isLoading = true;
 
+  double padding = 200.0;
+
   @override
   void initState() {
     ref.read(categoryListProvider.notifier).fetchData();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 600),
-      lowerBound: 0,
-      upperBound: 1,
-    );
-    _animationController.forward();
+    // _animationController = AnimationController(
+    //   vsync: this,
+    //   duration: const Duration(milliseconds: 600),
+    //   lowerBound: 0,
+    //   upperBound: 1,
+    // );
+    // _animationController.forward();
+    // setState(() {
+    //   padding = 0;
+    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Trigger the animation after the build is complete
+      setState(() {
+        padding = 0; // Change this to your desired padding value
+      });
+    });
     super.initState();
   }
 
@@ -45,8 +56,11 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen>
     List<Category> categories = ref.watch(categoryListProvider);
 
     return Scaffold(
-      body: AnimatedBuilder(
-        animation: _animationController,
+      body: AnimatedPadding(
+        duration: const Duration(seconds: 1),
+        padding: EdgeInsets.only(top: padding),
+        curve: Curves.linear,
+        // animation: _animationController,
         child: GridView.builder(
           itemCount: categories.length,
           padding: const EdgeInsets.all(16.0),
@@ -68,10 +82,6 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen>
               }
             },
           ),
-        ),
-        builder: (context, child) => Padding(
-          padding: EdgeInsets.only(top: 200 - _animationController.value * 200),
-          child: child,
         ),
       ),
     );
